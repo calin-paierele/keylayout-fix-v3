@@ -1,84 +1,75 @@
-# Keyboard Layout Auto-Fix Tool v2.0
+# TypeFix — Keyboard Layout Fixer for macOS
 
-Instantly fix text typed in the wrong keyboard layout.
+Typed in the wrong language? Select the text, press a hotkey — fixed instantly.
 
-**Supports:** Hebrew, Russian, Arabic <-> English
+**Default:** English ↔ Hebrew (Russian and Arabic available in settings)
 
-## Features
+---
 
-- **Hotkey Fix** — Select wrong text, press `Cmd+Shift+Z`, fixed!
-- **Auto-Detect** — Automatically fixes wrong-layout words as you type
-- **Multi-Language** — Hebrew, Russian, Arabic (easy to add more)
-- **Sound Feedback** — Pleasant bell ring when text is fixed (can be turned off)
-- **Start on Login** — Runs automatically when your Mac boots
+## How it works
+
+1. You type something with the wrong keyboard layout active
+2. Select the garbled text
+3. Press `Cmd+Shift+X` (or triple-tap Caps Lock)
+4. Text is converted and replaced in place
+
+---
 
 ## Setup
 
 ```bash
-git clone https://github.com/calin-paierele/keylayout-fix.git
-cd keylayout-fix
+git clone https://github.com/calin-paierele/keylayout-fix-v3.git
+cd keylayout-fix-v3
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-## Usage
-
+**Start the daemon:**
 ```bash
-source venv/bin/activate
 python3 keylayout_fix.py
 ```
 
-### Hotkey Mode
-1. Type something in the wrong layout
-2. Select the text
-3. Press **Cmd+Shift+Z**
-4. Text is converted in place + bell sound
-
-### Auto-Detect Mode
-Just type — when you finish a word (press space), the tool checks if it's in the wrong layout and fixes it automatically.
-
-## Start on Login
-
+**Start on every login (recommended):**
 ```bash
-python3 keylayout_fix.py --install     # Enable auto-start
-python3 keylayout_fix.py --uninstall   # Disable auto-start
+python3 keylayout_fix.py --install
 ```
 
-## Configuration
+---
 
-Settings are stored in `~/.keylayout-fix/config.json`:
+## Settings GUI
 
-```json
-{
-  "sound_enabled": true,
-  "auto_detect": true,
-  "hotkey": "cmd+shift+z",
-  "languages": ["hebrew", "russian", "arabic"]
-}
-```
+Open **TypeFix.app** (or run `python3 gui.py`) to change:
 
-Edit this file to:
-- Turn sound on/off
-- Enable/disable auto-detect
-- Choose which languages to support
+- **Languages** — Hebrew, Russian, Arabic (English always on)
+- **Shortcut** — Record any key combo
+- **Run on startup** — Toggle LaunchAgent on/off
+- **Sound feedback** — Toggle bell sound on fix
+
+---
 
 ## macOS Permissions
 
-First time running, grant **Accessibility** permission:
-**System Settings → Privacy & Security → Accessibility** → enable Terminal (or your Python app)
+Required: **System Settings → Privacy & Security → Accessibility** → enable Terminal or Python
+
+---
 
 ## Examples
 
-| Input (wrong layout) | Output (fixed) |
-|----------------------|----------------|
-| שדגכע | asdfg |
-| akuo | שלום |
-| ghbdtn | привет |
-| привет | privet |
+| Typed (wrong layout) | Fixed |
+|----------------------|-------|
+| `akuo` | `שלום` |
+| `שדגכע` | `asdfg` |
+| `ghbdtn` | `привет` |
+
+---
 
 ## Requirements
 
-- macOS
+- macOS 12+
 - Python 3
-- `pynput`
+- `pynput`, `customtkinter`, `pyobjc-framework-Quartz`, `pyobjc-framework-AppKit`
+
+## Technical note
+
+Uses `Quartz.CGEventTap` (not `pynput.Listener`) for keyboard monitoring — required for compatibility with macOS 26+ which enforces that Text Services Manager APIs run on the main thread.
