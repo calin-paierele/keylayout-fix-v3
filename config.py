@@ -9,8 +9,8 @@ CONFIG_FILE = os.path.join(CONFIG_DIR, 'config.json')
 DEFAULTS = {
     'sound_enabled': True,
     'auto_detect': False,
-    'hotkey': 'cmd+shift+z',
-    'languages': ['hebrew', 'russian', 'arabic'],
+    'hotkey': 'cmd+shift+x',
+    'languages': ['hebrew'],
 }
 
 

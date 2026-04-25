@@ -4,7 +4,7 @@ import os
 import sys
 import plistlib
 
-PLIST_NAME = 'com.keylayout-fix.plist'
+PLIST_NAME = 'com.calin.keylayout-fix.plist'
 PLIST_DIR = os.path.expanduser('~/Library/LaunchAgents')
 PLIST_PATH = os.path.join(PLIST_DIR, PLIST_NAME)
 
